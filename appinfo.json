@@ -1,0 +1,33 @@
+{
+	"uuid": "fc1bde20-5df3-4e88-8cf2-d6d80c73c875",
+	"shortName": "Blocky Round Variation 1",
+	"longName": "BlockyRoundVar1",
+	"companyName": "Willdorf",
+	"versionLabel": "1.0",
+	"sdkVersion": "3",
+	"targetPlatforms": ["basalt"],
+	"watchapp": {
+		"watchface": true
+	},
+	"capabilities" : [
+		"configurable"
+	],
+	"appKeys": {
+		"backgroundColor" : 0,
+		"blockOneColor" : 1,
+		"blockTwoColor" : 2,
+		"blockThreeColor" : 3,
+		"blockFourColor" : 4,
+		"blockFiveColor" : 5,
+		"blockSixColor" : 6,
+		"blockSevenColor" : 7,
+		"blockEightColor" : 8,
+		"blockNineColor" : 9,
+		"blockTenColor" : 10,
+		"blockElevenColor" : 11,
+		"blockTwelveColor" : 12
+	},
+	"resources": {
+		"media": []
+	}
+}
