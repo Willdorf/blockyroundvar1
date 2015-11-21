@@ -17,6 +17,8 @@
 #define KEY_TEMPERATURE 13
 #define KEY_CONDITIONS 14
 
+#define KEY_DEGREEOPTION 15
+
 static Window *window;
 static Layer *s_layer;
 static TextLayer *s_time_layer;
@@ -57,6 +59,8 @@ static GColor blockNineColor;
 static GColor blockTenColor;
 static GColor blockElevenColor;
 static GColor blockTwelveColor;
+
+static int degreeOption = 0;
 
 static const GPathInfo BLUETOOTH_INFO = {
 	.num_points = 9,
@@ -353,13 +357,32 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
 	Tuple *temp_t = dict_find(iter, KEY_TEMPERATURE);
 	Tuple *conditions_t = dict_find(iter, KEY_CONDITIONS);
 
+	Tuple *degreeOption_t = dict_find(iter, KEY_DEGREEOPTION);
+
 	//Store incoming information
 	static char temperature_buffer[8];
 	static char conditions_buffer[32];
 	static char weather_layer_buffer[42];
 
+	if (degreeOption_t) {
+		degreeOption = degreeOption_t->value->uint32;
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "degree Option : %d", degreeOption);
+		persist_write_int(KEY_DEGREEOPTION, degreeOption);
+	}
+
 	if (temp_t) {
-		snprintf(temperature_buffer, sizeof(temperature_buffer), "%d\u00B0", (int) temp_t->value->int32);
+		int kelvin = (int) temp_t->value->int32;
+		if (degreeOption == 0) {
+			//celsius
+			int celsius = kelvin - 273.15;
+			snprintf(temperature_buffer, sizeof(temperature_buffer), "%d\u00B0", (int) celsius);
+			APP_LOG(APP_LOG_LEVEL_DEBUG, "Degree option is Celsius: %d", degreeOption);
+		} else {
+			//fahrenheit
+			int fahrenheit = (kelvin - 273.15) * 1.8 + 32;
+			snprintf(temperature_buffer, sizeof(temperature_buffer), "%d\u00B0", (int) fahrenheit);
+			APP_LOG(APP_LOG_LEVEL_DEBUG, "Degree option is Fahrenheit: %d", degreeOption);
+		}
 	}
 
 	if (conditions_t) {
@@ -532,6 +555,12 @@ static void window_load(Window *window) {
 	}
 
 	setup_blocks();
+
+	if (persist_read_int(KEY_DEGREEOPTION)) {
+		degreeOption = persist_read_int(KEY_DEGREEOPTION);
+	} else {
+		degreeOption = 0;
+	}
 
 	s_weather_layer = text_layer_create(GRect(0,152, 144, 14));
 	text_layer_set_font(s_weather_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));

@@ -22,6 +22,16 @@ $submitButton.on('click', function() {
 	document.location = return_to + encodeURIComponent(JSON.stringify(getAndStoreConfigData()));
 });
 
+var degreeOption = 0;
+function tabClickHandler(value) {
+	console.log(value);
+	if (value == "Celsius") {
+		degreeOption = 0;
+	} else if (value == "Fahrenheit") {
+		degreeOption = 1;
+	}
+}
+
 function getAndStoreConfigData() {
 	var $backgroundColorPicker = $('#backgroundColorPicker');
 	var $blockOneColorPicker = $('#blockOneColorPicker');
@@ -50,7 +60,8 @@ function getAndStoreConfigData() {
 		blockNineColor : $blockNineColorPicker.val(),
 		blockTenColor : $blockTenColorPicker.val(),
 		blockElevenColor : $blockElevenColorPicker.val(),
-		blockTwelveColor : $blockTwelveColorPicker.val()
+		blockTwelveColor : $blockTwelveColorPicker.val(),
+		degreeOption : degreeOption
 	};
 
 	localStorage.willdorfblockyroundvar1backgroundColor = options.backgroundColor;
@@ -66,6 +77,7 @@ function getAndStoreConfigData() {
 	localStorage.willdorfblockyroundvar1blockTenColor = options.blockTenColor;
 	localStorage.willdorfblockyroundvar1blockElevenColor = options.blockElevenColor;
 	localStorage.willdorfblockyroundvar1blockTwelveColor = options.blockTwelveColor;
+	localStorage.willdorfblockyroundvar1degreeOption = options.degreeOption;
 
 	console.log('Got Options: ' + JSON.stringify(options));
 	return options;
@@ -86,7 +98,7 @@ function loadOptions() {
 	var $blockElevenColorPicker = $('#blockElevenColorPicker');
 	var $blockTwelveColorPicker = $('#blockTwelveColorPicker');
 
-	if (localStorage.backgroundColor) {
+	if (localStorage.willdorfblockyroundvar1backgroundColor) {
 		$backgroundColorPicker[0].value = localStorage.willdorfblockyroundvar1backgroundColor;
 		$blockOneColorPicker[0].value = localStorage.willdorfblockyroundvar1blockOneColor;
 		$blockTwoColorPicker[0].value = localStorage.willdorfblockyroundvar1blockTwoColor;
@@ -100,6 +112,16 @@ function loadOptions() {
 		$blockTenColorPicker[0].value = localStorage.willdorfblockyroundvar1blockTenColor;
 		$blockElevenColorPicker[0].value = localStorage.willdorfblockyroundvar1blockElevenColor;
 		$blockTwelveColorPicker[0].value = localStorage.willdorfblockyroundvar1blockTwelveColor;
+
+		//set the corresponding tab to active
+		degreeOption = localStorage.willdorfblockyroundvar1degreeOption;
+		if (degreeOption == 0) {
+			$('#Celsius').attr('class', 'tab-button active');
+		} else {
+			$('#Fahrenheit').attr('class', 'tab-button active');
+		}
+	} else {
+		$('#Celsius').attr('class', 'tab-button active');
 	}
 }
 
