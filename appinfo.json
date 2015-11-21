@@ -3,7 +3,7 @@
 	"shortName": "Blocky Round Variation 1",
 	"longName": "BlockyRoundVar1",
 	"companyName": "Willdorf",
-	"versionLabel": "1.1",
+	"versionLabel": "1.2",
 	"sdkVersion": "3",
 	"targetPlatforms": ["basalt"],
 	"watchapp": {
